@@ -70,3 +70,31 @@ func Test(t *testing.T) {
 		})
 	}
 }
+
+func TestIterating(t *testing.T) {
+	doc := NewDoc("root")
+	root := doc.RootElem()
+	root.AddElem("first").AddText("une")
+	root.AddText("some text")
+	root.AddElem("second", Attrib{"class": "someclass"})
+
+	t.Run("iterating", func(t *testing.T) {
+		for _, child := range root.Children() {
+			if child.Type() == NodeElem {
+				child.(Elem).Attrib()["visible"] = "true"
+			}
+		}
+		wantStr := `<root><first visible="true">une</first>some text<second class="someclass" visible="true"/></root>`
+		buf := bytes.Buffer{}
+		written, err := doc.WriteTo(&buf)
+		if err != nil {
+			t.Errorf("iterating: unexpected error %v", err)
+		}
+		if got := buf.String(); got != wantStr {
+			t.Errorf("iterating: got = %v, want %v", got, wantStr)
+		}
+		if written != int64(len(wantStr)) {
+			t.Errorf("iterating: unexpected length: %v <> %v", written, len(wantStr))
+		}
+	})
+}
