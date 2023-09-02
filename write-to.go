@@ -24,7 +24,21 @@ func XmlEncode(enc string) string {
 	enc = strings.ReplaceAll(enc, ">", "&gt;")
 	enc = strings.ReplaceAll(enc, "'", "&apos;")
 	enc = strings.ReplaceAll(enc, "\"", "&quot;")
-	return enc
+	out := ""
+	off := 0
+	for pos, ch := range enc {
+		if ch < ' ' {
+			if off < pos {
+				out += enc[off:pos]
+			}
+			out += fmt.Sprintf("&#x%02x;", ch)
+			off = pos + 1
+		}
+	}
+	if len(enc) > off {
+		out += enc[off:]
+	}
+	return out
 }
 
 func (elem *elem) WriteTo(out io.Writer) (count int64, err error) {
@@ -38,7 +52,7 @@ func (elem *elem) WriteTo(out io.Writer) (count int64, err error) {
 	}
 	sort.Strings(keys)
 	for _, k := range keys {
-		v := elem.attrib[k]
+		v := fmt.Sprintf("%v", elem.attrib[k])
 		n, e = fmt.Fprintf(out, " %s=\"%s\"", k, XmlEncode(v))
 		if count += int64(n); e != nil {
 			return count, e

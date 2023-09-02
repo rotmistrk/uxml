@@ -47,16 +47,16 @@ func Test(t *testing.T) {
 					"type": "root",
 				})
 				lst := doc.RootElem().AddElem("list")
-				lst.AddElem("li", Attrib{"ord": "1"}).AddText("une")
+				lst.AddElem("li", Attrib{"ord": 1}).AddText("une")
 				lst.AddElem("li", Attrib{"ord": "2"}).AddText("deux")
-				lst.AddElem("li", Attrib{"ord": "3"}).AddText("trois")
+				lst.AddElem("li", Attrib{"ord": 3.5}).AddText("trois")
 				par := doc.RootElem().AddElem("par", Attrib{"type": "regular"})
 				par.AddText("This is ")
 				par.AddElem("b").AddText("formatted")
 				par.AddText(" text")
 				return doc
 			},
-			wantStr: "<root type=\"root\"><list><li ord=\"1\">une</li><li ord=\"2\">deux</li><li ord=\"3\">trois</li></list><par type=\"regular\">This is <b>formatted</b> text</par></root>",
+			wantStr: "<root type=\"root\"><list><li ord=\"1\">une</li><li ord=\"2\">deux</li><li ord=\"3.5\">trois</li></list><par type=\"regular\">This is <b>formatted</b> text</par></root>",
 		},
 	}
 	for _, test := range tests {

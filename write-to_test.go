@@ -41,6 +41,16 @@ func TestXmlEncode(t *testing.T) {
 			args: args{"let's go"},
 			want: "let&apos;s go",
 		},
+		{
+			name: "control chars in the middle",
+			args: args{"here\twe\nare"},
+			want: "here&#x09;we&#x0a;are",
+		},
+		{
+			name: "control chars in the ends",
+			args: args{"\nthat is funny & more funny\n"},
+			want: "&#x0a;that is funny &amp; more funny&#x0a;",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

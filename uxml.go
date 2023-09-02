@@ -16,7 +16,7 @@ type Node interface {
 	WriteTo(writer io.Writer) (int64, error)
 }
 
-type Attrib map[string]string
+type Attrib map[string]any
 
 type Elem interface {
 	Node
