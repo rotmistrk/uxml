@@ -24,7 +24,8 @@ type Elem interface {
 	Attrib() Attrib
 	Children() []Node
 	AddElem(string, ...Attrib) Elem
-	AddText(string) Text
+	AddText(...any) Text
+	AddTextf(string, ...any) Text
 }
 
 type Text interface {

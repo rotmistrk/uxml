@@ -1,5 +1,7 @@
 package uxml
 
+import "fmt"
+
 type text struct {
 	parent   Elem
 	contents string
@@ -68,10 +70,19 @@ func copyAttr(attr []Attrib, e *elem) {
 	}
 }
 
-func (e *elem) AddText(contents string) Text {
+func (e *elem) AddText(contents ...any) Text {
 	child := &text{
 		parent:   e,
-		contents: contents,
+		contents: fmt.Sprint(contents...),
+	}
+	e.children = append(e.children, child)
+	return child
+}
+
+func (e *elem) AddTextf(format string, contents ...any) Text {
+	child := &text{
+		parent:   e,
+		contents: fmt.Sprintf(format, contents...),
 	}
 	e.children = append(e.children, child)
 	return child
